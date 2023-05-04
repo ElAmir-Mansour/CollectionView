@@ -10,21 +10,22 @@ import UIKit
 
 class MultiTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    var arrPhotos = [UIImage]()
-    @IBOutlet weak var lblTitle: UILabel!
-    @IBOutlet weak var collectionView: UICollectionView!
+    var model = [HomeData]()
     var timer: Timer?
     var currentIndex = 0
+
+    
+    @IBOutlet weak var collectionView: UICollectionView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.register(UINib(nibName: CollectionViewCell.id, bundle: nil), forCellWithReuseIdentifier: CollectionViewCell.id)
     }
     
-    func setupCell(title: String, arrPhotos: [UIImage]) {
-        self.lblTitle.text = title
-        self.arrPhotos = arrPhotos
+    func setupCell(_ model: [HomeData]) {
+        self.model = model
         self.collectionView.reloadData()
     }
     
@@ -32,11 +33,12 @@ class MultiTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectio
         stopAutoScrolling()
         timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true, block: { [weak self] _ in
             guard let self = self else { return }
-            if self.currentIndex < self.arrPhotos.count - 1 {
+            if self.currentIndex < self.model.count - 1 {
                 self.currentIndex += 1
             } else {
                 self.currentIndex = 0
             }
+            print(self.currentIndex)
             let indexPath = IndexPath(item: self.currentIndex, section: 0)
             self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         })
@@ -46,14 +48,15 @@ class MultiTableViewCell: UITableViewCell, UICollectionViewDelegate, UICollectio
         timer?.invalidate()
         timer = nil
     }
-    
+        
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return arrPhotos.count
+        return model.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cvCell", for: indexPath) as! MultiCollectionViewCell
-        cell.img.image = arrPhotos[indexPath.row]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCell.id, for: indexPath) as! CollectionViewCell
+        let item = model[indexPath.row]
+        cell.collectionViewImage.image = item.image
         return cell
     }
     

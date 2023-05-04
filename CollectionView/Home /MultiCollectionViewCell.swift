@@ -8,6 +8,5 @@
 import UIKit
 
 class MultiCollectionViewCell: UICollectionViewCell {
-    
     @IBOutlet weak var img: UIImageView!
 }

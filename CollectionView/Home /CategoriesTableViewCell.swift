@@ -12,7 +12,6 @@ class CategoriesTableViewCell: UITableViewCell, UICollectionViewDelegate, UIColl
     var categories = [Cat]()
     
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var lblTitle: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -32,7 +31,6 @@ class CategoriesTableViewCell: UITableViewCell, UICollectionViewDelegate, UIColl
     }
     
     func setupCell(title: String, categories: [String], photos: [UIImage]) {
-        self.lblTitle.text = title
         let cat = Cat(photos: photos, categories: categories)
         self.categories = [cat]
     }
